@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Utilexa - Online Tools</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<script>
+  const searchInput = document.getElementById('toolSearch');
+  const toolItems = document.querySelectorAll('.tool-grid a');
+
+  searchInput.addEventListener('input', () => {
+    const searchValue = searchInput.value.toLowerCase();
+
+    toolItems.forEach(item => {
+      const toolName = item.innerText.toLowerCase();
+      if (toolName.includes(searchValue)) {
+        item.style.display = 'flex';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+</script>
+<body>
+
+  <header>
+    <h1>🧰 Welcome to Utilexa</h1>
+    <p>All-in-one toolkit: AI, PDF, Text, Code, and More</p>
+  </header>
+<div class="search-container">
+  <input type="text" id="toolSearch" placeholder="🔍 Search your tool...">
+</div>
+
+  <section class="tools-container">
+    
+    <!-- 🧠 AI Education Tools -->
+    <h2>🧠 AI Education Tools</h2>
+    <div class="tool-category">
+      <a href="tools/ai-quiz-maker.html"><img src="icons/ai-quiz.png">AI Quiz Maker</a>
+      <a href="tools/ai-exam-generator.html"><img src="icons/ai-exam.png">AI Exam Generator</a>
+      <a href="tools/ai-essay-writer.html"><img src="icons/ai-essay.png">AI Essay Writer</a>
+      <a href="tools/ai-summarizer.html"><img src="icons/ai-summary.png">AI Text Summarizer</a>
+      <a href="tools/ai-notes.html"><img src="icons/ai-notes.png">AI Study Notes</a>
+      <a href="tools/ai-chat.html"><img src="icons/ai-chat.png">AI Study Chat</a>
+      <a href="tools/ai-flashcards.html"><img src="icons/ai-flashcard.png">AI Flashcards</a>
+      <a href="tools/ai-planner.html"><img src="icons/ai-planner.png">AI Study Planner</a>
+    </div>
+
+    <!-- 📄 PDF Tools -->
+    <h2>📄 PDF Tools</h2>
+    <div class="tool-category">
+      <a href="tools/pdf-to-word.html"><img src="icons/pdf-to-word.png">PDF to Word</a>
+      <a href="tools/word-to-pdf.html"><img src="icons/word-to-pdf.png">Word to PDF</a>
+      <a href="tools/pdf-to-png.html"><img src="icons/pdf-to-png.png">PDF to PNG</a>
+      <a href="tools/edit-pdf.html"><img src="icons/edit-pdf.png">Edit PDF</a>
+      <a href="tools/compress-pdf.html"><img src="icons/compress.png">Compress PDF</a>
+      <a href="tools/split-pdf.html"><img src="icons/split.png">Split PDF</a>
+      <a href="tools/merge-pdf.html"><img src="icons/merge.png">Merge PDF</a>
+      <a href="tools/rotate-pdf.html"><img src="icons/rotate.png">Rotate PDF</a>
+    </div>
+
+    <!-- 📝 Text Tools -->
+    <h2>📝 Text Tools</h2>
+    <div class="tool-category">
+      <a href="tools/case-converter.html"><img src="icons/case.png">Case Converter</a>
+      <a href="tools/lorem-ipsum.html"><img src="icons/lorem.png">Lorem Ipsum Generator</a>
+      <a href="tools/letter-counter.html"><img src="icons/letter.png">Letter Counter</a>
+      <a href="tools/text-to-handwriting.html"><img src="icons/handwriting.png">Text to Handwriting</a>
+      <a href="tools/bionic-reading.html"><img src="icons/bionic.png">Bionic Reading</a>
+      <a href="tools/remove-whitespace.html"><img src="icons/space.png">Whitespace Remover</a>
+      <a href="tools/font-pair.html"><img src="icons/font-pair.png">Google Font Pair</a>
+    </div>
+
+    <!-- 🎨 Image & Color Tools -->
+    <h2>🎨 Image & Color Tools</h2>
+    <div class="tool-category">
+      <a href="tools/image-to-pdf.html"><img src="icons/image-to-pdf.png">Image to PDF</a>
+      <a href="tools/ai-caption.html"><img src="icons/image-caption.png">Image Caption Generator</a>
+      <a href="tools/photo-censor.html"><img src="icons/photo-censor.png">Photo Censor Tool</a>
+      <a href="tools/ai-color-palette.html"><img src="icons/color-palette.png">AI Color Palette</a>
+    </div>
+
+    <!-- ⚙️ Code & CSS Tools -->
+    <h2>⚙️ Code & CSS Tools</h2>
+    <div class="tool-category">
+      <a href="tools/code-to-image.html"><img src="icons/code-image.png">Code to Image</a>
+      <a href="tools/css-loader.html"><img src="icons/loader.png">CSS Loader Generator</a>
+      <a href="tools/css-background.html"><img src="icons/bg-pattern.png">CSS Background Pattern</a>
+      <a href="tools/css-clip-path.html"><img src="icons/clip-path.png">CSS Clip Path</a>
+    </div>
+
+    <!-- 📱 Social Tools -->
+    <h2>📱 Social Tools</h2>
+    <div class="tool-category">
+      <a href="tools/youtube-downloader.html"><img src="icons/youtube.png">YouTube Downloader</a>
+      <a href="tools/tweet-generator.html"><img src="icons/tweet.png">Tweet Generator</a>
+      <a href="tools/tweet-to-image.html"><img src="icons/tweet-image.png">Tweet to Image</a>
+      <a href="tools/twitter-revenue.html"><img src="icons/revenue.png">Twitter Revenue Estimator</a>
+      <a href="tools/instagram-post.html"><img src="icons/instagram.png">Instagram Post Generator</a>
+    </div>
+
+    <!-- 🧪 Misc / Other Tools -->
+    <h2>🧪 Miscellaneous Tools</h2>
+    <div class="tool-category">
+      <a href="tools/html-to-pdf.html"><img src="icons/html-pdf.png">HTML to PDF</a>
+      <a href="tools/scanned-pdf.html"><img src="icons/scanned.png">Scanned PDF Converter</a>
+      <a href="tools/fill-form.html"><img src="icons/fill-form.png">Fill Form</a>
+      <a href="tools/add-signature.html"><img src="icons/sign.png">Add Signature</a>
+      <a href="tools/annotate-pdf.html"><img src="icons/annotate.png">Annotate PDF</a>
+      <a href="tools/extract-pages.html"><img src="icons/extract.png">Extract Pages</a>
+      <a href="tools/product-finder.html"><img src="icons/finder.png">Product Finder</a>
+      <a href="tools/letterhead-design.html"><img src="icons/letterhead.png">Letterhead in Word</a>
+    </div>
+
+  </section>
+
+  <footer>
+<p>Made with ❤️ by Rashid for Utilexa</p>
+  </footer>
+
+
+</body>
+</html>

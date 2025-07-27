@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whitespace Remover - Utilexa</title>
+</head>
+<body>
+  <h1>Multiple Whitespace Remover</h1>
+  <textarea id="spaceText" rows="5" cols="50" placeholder="Enter text..."></textarea><br>
+  <button onclick="removeSpaces()">Remove Extra Spaces</button>
+  <p id="cleaned"></p>
+  <script>
+    function removeSpaces() {
+      const txt = document.getElementById('spaceText').value;
+      const cleaned = txt.replace(/\s+/g, ' ').trim();
+      document.getElementById('cleaned').innerText = cleaned;
+    }
+  </script>
+  <br><br>
+  <a href="../index.html">⬅ Back to Home</a>
+</body>
+</html>
