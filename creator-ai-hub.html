@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creator AI Hub</title>
+  <style>
+    :root {
+      --bg: #070b16;
+      --bg2: #0f1730;
+      --card: rgba(19, 28, 47, 0.93);
+      --card2: rgba(14, 22, 39, 0.93);
+      --text: #eaf1ff;
+      --muted: #9daecc;
+      --primary: #6d93ff;
+      --secondary: #a66dff;
+      --success: #4ad9a3;
+      --danger: #ff8ca3;
+      --warning: #ffd679;
+      --border: #2c3b61;
+      --shadow: 0 18px 34px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at 6% 4%, #24376b 0%, #0f1730 28%, var(--bg) 62%);
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 16px 14px;
+      background: rgba(7, 12, 24, 0.9);
+      border-right: 1px solid var(--border);
+      backdrop-filter: blur(7px);
+      animation: fadeIn 0.4s ease;
+    }
+
+    .brand,
+    .mini-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: linear-gradient(155deg, rgba(109, 147, 255, 0.16), rgba(166, 109, 255, 0.08));
+      padding: 13px;
+      box-shadow: var(--shadow);
+    }
+
+    .brand { margin-bottom: 10px; }
+    .mini-card { margin-bottom: 10px; background: rgba(255, 255, 255, 0.02); }
+
+    .brand h1 { margin: 0; font-size: 1.15rem; }
+    .brand p,
+    .mini-card p { margin: 6px 0 0; color: var(--muted); font-size: 0.83rem; line-height: 1.35; }
+
+    .tab-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .tab-btn {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text);
+      text-align: left;
+      padding: 10px 11px;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      transform: translateY(-1px);
+      border-color: #5876bf;
+    }
+
+    .tab-btn.active {
+      border-color: #7398ff;
+      background: linear-gradient(145deg, rgba(109, 147, 255, 0.28), rgba(166, 109, 255, 0.22));
+      box-shadow: 0 8px 20px rgba(109, 147, 255, 0.2);
+    }
+
+    .main {
+      width: min(1000px, 100%);
+      margin: 0 auto;
+      padding: 18px clamp(12px, 3vw, 28px) 30px;
+      animation: slideUp 0.45s ease;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: linear-gradient(168deg, var(--card), var(--card2));
+      box-shadow: var(--shadow);
+      padding: clamp(14px, 2.2vw, 20px);
+      margin-bottom: 14px;
+      animation: fadeIn 0.45s ease;
+    }
+
+    h2 { margin: 0 0 8px; font-size: 1.08rem; }
+
+    .sub {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .chip {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid #445d95;
+      padding: 5px 10px;
+      font-size: 0.78rem;
+      color: #cddfff;
+      margin-bottom: 8px;
+      background: rgba(109, 147, 255, 0.13);
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: end; }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid #304474;
+      border-radius: 12px;
+      background: #0b1530;
+      color: var(--text);
+      padding: 11px 12px;
+      font-size: 0.94rem;
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #7da0ff;
+      box-shadow: 0 0 0 3px rgba(125, 160, 255, 0.22);
+    }
+
+    textarea { min-height: 140px; resize: vertical; line-height: 1.5; }
+
+    .hint,
+    .tiny { color: var(--muted); font-size: 0.8rem; margin-top: 7px; line-height: 1.35; }
+
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 11px 15px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      transition: transform 0.15s ease, filter 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.07);
+      box-shadow: 0 8px 18px rgba(110, 147, 255, 0.25);
+    }
+
+    .btn:disabled { opacity: 0.72; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .btn.secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .btn.warning {
+      color: #1b1400;
+      background: linear-gradient(135deg, #ffd26d, #ffbf4d);
+    }
+
+    .btn.pay {
+      background: linear-gradient(135deg, #7e5cff, #4fb8ff);
+    }
+
+    .status { min-height: 20px; margin-top: 10px; font-size: 0.88rem; color: var(--muted); }
+    .status.ok { color: var(--success); }
+    .status.error { color: var(--danger); }
+    .status.warn { color: var(--warning); }
+
+    .usage-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 0.83rem;
+      color: var(--muted);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .price-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 10px;
+    }
+
+    .price-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+
+    .price-line {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .bar {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: #152444;
+      overflow: hidden;
+      border: 1px solid #2c3f69;
+      margin-top: 7px;
+    }
+
+    .bar > span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #6d93ff, #a66dff);
+      transition: width 0.25s ease;
+    }
+
+    .loading { display: inline-flex; align-items: center; gap: 8px; }
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid #4f67a8;
+      border-top-color: #bdd0ff;
+      animation: spin 0.9s linear infinite;
+    }
+
+    .output {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.55;
+      font-size: 0.92rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      color: #d8e6ff;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 920px) {
+      .shell { grid-template-columns: 1fr; }
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .tab-list { display: flex; overflow-x: auto; }
+      .tab-btn { white-space: nowrap; flex: 0 0 auto; }
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .btn { width: 100%; }
+      .actions .btn.secondary { width: calc(50% - 5px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>✨ Creator AI Hub</h1>
+        <p>Premium creator toolkit powered by OpenAI.</p>
+      </div>
+
+      <div class="mini-card">
+        <strong id="accountBadge">Guest (Free)</strong>
+        <p id="accountInfo">Log in to unlock your account and usage tracking.</p>
+      </div>
+
+      <div class="tab-list" id="tabs"></div>
+    </aside>
+
+    <main class="main">
+      <section class="card">
+        <h2>Account & Monetization</h2>
+        <p class="sub">Free plan includes <strong>5 requests/day</strong>. Paid plans are unlimited.</p>
+        <div class="grid-2">
+          <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="you@example.com" autocomplete="off" />
+          </div>
+          <div>
+            <label for="password">Password</label>
+            <input id="password" type="password" placeholder="••••••••" autocomplete="off" />
+          </div>
+        </div>
+        <div class="actions">
+          <button id="loginBtn" class="btn" type="button">Login / Sign Up</button>
+          <button id="logoutBtn" class="btn secondary" type="button">Logout</button>
+          <button id="upgradeBtn" class="btn pay" type="button">Upgrade with Stripe</button>
+          <button id="simulatePaidBtn" class="btn warning" type="button">Simulate Paid Access</button>
+        </div>
+        <div class="pricing-grid">
+          <div class="price-card">
+            <strong>Free</strong>
+            <div class="price-line" id="priceFreeUsd">$0 / month</div>
+            <div class="price-line" id="priceFreeInr">₹0</div>
+            <div class="price-line" id="priceFreePkr">₨0</div>
+          </div>
+          <div class="price-card">
+            <strong>Prime Monthly</strong>
+            <div class="price-line" id="pricePrimeMonthlyUsd">$49 / month</div>
+            <div class="price-line" id="pricePrimeMonthlyInr"></div>
+            <div class="price-line" id="pricePrimeMonthlyPkr"></div>
+          </div>
+          <div class="price-card">
+            <strong>Prime Yearly</strong>
+            <div class="price-line" id="pricePrimeYearlyUsd">$499 / year</div>
+            <div class="price-line" id="pricePrimeYearlyInr"></div>
+            <div class="price-line" id="pricePrimeYearlyPkr"></div>
+          </div>
+        </div>
+        <div class="grid-3" style="margin-top:10px;">
+          <div>
+            <label for="convertAmount">Currency Converter</label>
+            <input id="convertAmount" type="number" min="0" step="0.01" value="1" />
+          </div>
+          <select id="convertFrom">
+            <option value="USD">USD</option>
+            <option value="INR">INR</option>
+            <option value="PKR">PKR</option>
+          </select>
+          <select id="convertTo">
+            <option value="INR">INR</option>
+            <option value="USD">USD</option>
+            <option value="PKR">PKR</option>
+          </select>
+        </div>
+        <div class="actions" style="margin-top:10px;">
+          <button id="convertBtn" class="btn secondary" type="button">Convert Currency</button>
+        </div>
+        <p class="tiny" id="convertResult">1 USD = -- INR / -- PKR</p>
+        <p class="tiny">Connect a real backend + Stripe Checkout session URL for production payments.</p>
+      </section>
+
+      <section class="card">
+        <h2>OpenAI Setup</h2>
+        <p class="sub">Use model <strong>gpt-4o-mini</strong> from the Responses API.</p>
+        <div class="grid-3">
+          <div>
+            <label for="apiKey">OpenAI API Key</label>
+            <input id="apiKey" type="password" placeholder="sk-proj-..." autocomplete="off" />
+          </div>
+          <button id="rememberBtn" class="btn secondary" type="button">Remember Key: Off</button>
+          <select id="planPreview">
+            <option value="auto" selected>Plan: Auto</option>
+            <option value="free">Preview Free</option>
+            <option value="paid">Preview Paid</option>
+          </select>
+        </div>
+        <p class="tiny">Security note: client-side apps expose keys. Use a backend proxy for production.</p>
+
+        <div class="usage-line">
+          <span id="usageText">Usage today: 0 / 5</span>
+          <span id="planText">Current plan: Free</span>
+        </div>
+        <div class="bar"><span id="usageBar"></span></div>
+      </section>
+
+      <section class="card">
+        <span class="chip" id="activeToolChip">YouTube Script Generator</span>
+        <h2 id="toolTitle">YouTube Script Generator</h2>
+        <p class="sub" id="toolDesc"></p>
+        <label for="inputPrompt">Input</label>
+        <textarea id="inputPrompt"></textarea>
+        <p class="hint" id="toolHint"></p>
+
+        <div class="actions">
+          <button id="generateBtn" class="btn" type="button">Generate</button>
+          <button id="clearBtn" class="btn secondary" type="button">Clear</button>
+          <button id="copyBtn" class="btn secondary" type="button">Copy Output</button>
+          <button id="downloadBtn" class="btn secondary" type="button">Download .txt</button>
+        </div>
+        <div class="status" id="status"></div>
+      </section>
+
+      <section class="card">
+        <h2>Output</h2>
+        <pre id="output" class="output">Your result will appear here.</pre>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const DAILY_FREE_LIMIT = 5;
+    const STRIPE_UPGRADE_URL = "https://buy.stripe.com/test_14k8wQ6Wf5b5gvu6oo";
+    const PLAN_USD = { free: 0, primeMonthly: 49, primeYearly: 499 };
+    const FALLBACK_RATES = { USD: 1, INR: 83.5, PKR: 278 };
+
+    const tools = [
+      {
+        id: "youtube-script",
+        name: "YouTube Script Generator",
+        desc: "Viral script framework with hooks, retention beats, and strong CTA.",
+        placeholder: "Topic: Why most creators fail in their first 90 days",
+        hint: "Outputs hook, intro, storytelling body, engagement hooks, climax, conclusion, CTA, plus titles and thumbnail text.",
+        systemPrompt: `You are a top-tier YouTube content strategist and scriptwriter.
+
+Create a HIGHLY engaging, viral YouTube script.
+
+Topic: {input}
+
+Structure:
+1. Hook (0–5 sec) – shocking, curiosity-driven
+2. Intro (5–15 sec) – set expectation
+3. Main Content – storytelling + value + pattern interrupts
+4. Engagement Hooks – questions, curiosity loops
+5. Climax / Key Insight
+6. Conclusion
+7. Strong Call-To-Action
+
+Style:
+- Conversational, simple English
+- High retention (short sentences)
+- Emotional + curiosity-driven
+- Avoid boring or generic lines
+
+Also generate:
+- 3 viral titles
+- 5 thumbnail text ideas
+
+Make it feel like a video that gets millions of views.`
+      },
+      {
+        id: "story",
+        name: "Story Generator",
+        desc: "Cinematic short story generator with emotional tension and twist.",
+        placeholder: "Topic: A delivery rider finds a letter that changes his life",
+        hint: "Includes hook, conflict, emotional build-up, twist ending, and one-line moral.",
+        systemPrompt: `You are a cinematic storyteller.
+
+Write a powerful, emotional story.
+
+Topic: {input}
+
+Requirements:
+- Strong opening hook
+- Relatable characters
+- Clear conflict
+- Emotional build-up
+- Unexpected twist ending
+- Meaningful lesson
+
+Style:
+- Simple, visual language
+- Short paragraphs
+- High emotional impact
+
+Also include:
+- Story title
+- 1-line moral
+
+Make it feel like a viral short story or reel.`
+      },
+      {
+        id: "thumbnail-caption",
+        name: "Thumbnail + Caption Generator",
+        desc: "CTR-focused thumbnail text, titles, and Instagram caption pack.",
+        placeholder: "Topic: I built a business with $0 budget",
+        hint: "Generates 5 thumbnail texts, 3 YouTube titles, and 1 Instagram caption with hashtags.",
+        systemPrompt: `You are a viral content expert for YouTube and Instagram.
+
+Topic: {input}
+
+Generate:
+
+1. Thumbnail Text (5 options)
+- 2–5 words max
+- Bold, curiosity-driven
+- Emotional triggers (shock, fear, curiosity, excitement)
+
+2. YouTube Titles (3 options)
+- High CTR
+- Use power words
+- Create curiosity gap
+
+3. Instagram Caption:
+- Hook in first line
+- Short storytelling
+- CTA (like, comment, share)
+- Add 10 relevant hashtags
+
+Make everything optimized for clicks and engagement.`
+      },
+      {
+        id: "side-hustle",
+        name: "Side Hustle Finder",
+        desc: "Actionable side-hustle ideas with clear steps, tools, and earning estimates.",
+        placeholder: "User skills: Canva design, basic copywriting, 2 hours/day",
+        hint: "Produces 5 beginner-friendly, low-investment ideas with monthly earning ranges and daily time required.",
+        systemPrompt: `You are a business strategist.
+
+Suggest 5 realistic side hustles.
+
+User skills: {input}
+
+For each idea include:
+- Idea name
+- Why it suits the user
+- Step-by-step starting plan
+- Tools needed
+- Earning potential (monthly estimate)
+- Time required per day
+
+Conditions:
+- Beginner-friendly
+- Low or zero investment
+- Online-focused if possible
+
+Make ideas practical and actionable, not generic.`
+      },
+      {
+        id: "resume",
+        name: "Resume Generator",
+        desc: "Professional ATS-ready resume summary, bio, skills, and role suggestions.",
+        placeholder: "User details: 3 years frontend dev, React, improved load speed by 40%",
+        hint: "Returns summary, short bio, key skills, and optional suggested job roles.",
+        systemPrompt: `You are a professional resume writer.
+
+Create a strong resume summary and bio.
+
+User details:
+{input}
+
+Output:
+
+1. Resume Summary (professional, ATS-friendly)
+2. Short Bio (for social media or portfolio)
+3. Key Skills (bullet points)
+4. Optional: Suggested job roles
+
+Style:
+- Clear and confident
+- Industry-relevant language
+- No fluff or generic phrases
+
+Make it look like a high-quality professional profile.`
+      },
+      {
+        id: "motivation-chatbot",
+        name: "Motivation Chatbot",
+        desc: "Calm and practical motivation coaching with action-oriented guidance.",
+        placeholder: "User message: I keep overthinking and never start the work.",
+        hint: "Responds with acknowledgement, clear advice, action steps, and encouragement.",
+        systemPrompt: `You are a motivational coach and mindset mentor.
+
+User message: {input}
+
+Your role:
+- Provide practical, positive, and realistic advice
+- Be supportive but not overly emotional
+- Focus on action steps and mindset shifts
+
+Rules:
+- Do NOT give medical or mental health diagnosis
+- Do NOT sound robotic or generic
+
+Structure:
+1. Acknowledge the situation
+2. Give clear advice
+3. Suggest 2–3 actionable steps
+4. End with encouragement
+
+Tone:
+- Calm, confident, supportive
+- Simple and easy to understand`
+      }
+    ];
+
+    const el = {
+      tabs: document.getElementById("tabs"),
+      accountBadge: document.getElementById("accountBadge"),
+      accountInfo: document.getElementById("accountInfo"),
+      email: document.getElementById("email"),
+      password: document.getElementById("password"),
+      loginBtn: document.getElementById("loginBtn"),
+      logoutBtn: document.getElementById("logoutBtn"),
+      upgradeBtn: document.getElementById("upgradeBtn"),
+      simulatePaidBtn: document.getElementById("simulatePaidBtn"),
+      apiKey: document.getElementById("apiKey"),
+      rememberBtn: document.getElementById("rememberBtn"),
+      planPreview: document.getElementById("planPreview"),
+      priceFreeUsd: document.getElementById("priceFreeUsd"),
+      priceFreeInr: document.getElementById("priceFreeInr"),
+      priceFreePkr: document.getElementById("priceFreePkr"),
+      pricePrimeMonthlyUsd: document.getElementById("pricePrimeMonthlyUsd"),
+      pricePrimeMonthlyInr: document.getElementById("pricePrimeMonthlyInr"),
+      pricePrimeMonthlyPkr: document.getElementById("pricePrimeMonthlyPkr"),
+      pricePrimeYearlyUsd: document.getElementById("pricePrimeYearlyUsd"),
+      pricePrimeYearlyInr: document.getElementById("pricePrimeYearlyInr"),
+      pricePrimeYearlyPkr: document.getElementById("pricePrimeYearlyPkr"),
+      convertAmount: document.getElementById("convertAmount"),
+      convertFrom: document.getElementById("convertFrom"),
+      convertTo: document.getElementById("convertTo"),
+      convertBtn: document.getElementById("convertBtn"),
+      convertResult: document.getElementById("convertResult"),
+      usageText: document.getElementById("usageText"),
+      planText: document.getElementById("planText"),
+      usageBar: document.getElementById("usageBar"),
+      activeToolChip: document.getElementById("activeToolChip"),
+      toolTitle: document.getElementById("toolTitle"),
+      toolDesc: document.getElementById("toolDesc"),
+      toolHint: document.getElementById("toolHint"),
+      inputPrompt: document.getElementById("inputPrompt"),
+      generateBtn: document.getElementById("generateBtn"),
+      clearBtn: document.getElementById("clearBtn"),
+      copyBtn: document.getElementById("copyBtn"),
+      downloadBtn: document.getElementById("downloadBtn"),
+      status: document.getElementById("status"),
+      output: document.getElementById("output")
+    };
+
+    let activeTool = tools[0];
+    let rememberKey = false;
+    let fxRates = { ...FALLBACK_RATES };
+
+    function todayKey() {
+      const now = new Date();
+      return `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}-${String(now.getUTCDate()).padStart(2, "0")}`;
+    }
+
+    function getAccount() {
+      const raw = localStorage.getItem("creator_ai_hub_account");
+      if (!raw) return { email: "", plan: "free", paidSimulated: false };
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return { email: "", plan: "free", paidSimulated: false };
+      }
+    }
+
+    function setAccount(data) {
+      localStorage.setItem("creator_ai_hub_account", JSON.stringify(data));
+    }
+
+    function getUsageData() {
+      const raw = localStorage.getItem("creator_ai_hub_usage");
+      if (!raw) return { date: todayKey(), count: 0 };
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed.date !== todayKey()) return { date: todayKey(), count: 0 };
+        return parsed;
+      } catch {
+        return { date: todayKey(), count: 0 };
+      }
+    }
+
+    function setUsageData(data) {
+      localStorage.setItem("creator_ai_hub_usage", JSON.stringify(data));
+    }
+
+    function formatMoney(amount, currency) {
+      return new Intl.NumberFormat("en-US", { style: "currency", currency, maximumFractionDigits: 2 }).format(amount);
+    }
+
+    function convertAmountValue(amount, from, to) {
+      if (!fxRates[from] || !fxRates[to]) return null;
+      const amountInUsd = amount / fxRates[from];
+      return amountInUsd * fxRates[to];
+    }
+
+    function updatePlanPricingUI() {
+      const primeMonthlyInr = convertAmountValue(PLAN_USD.primeMonthly, "USD", "INR");
+      const primeMonthlyPkr = convertAmountValue(PLAN_USD.primeMonthly, "USD", "PKR");
+      const primeYearlyInr = convertAmountValue(PLAN_USD.primeYearly, "USD", "INR");
+      const primeYearlyPkr = convertAmountValue(PLAN_USD.primeYearly, "USD", "PKR");
+
+      el.priceFreeUsd.textContent = formatMoney(PLAN_USD.free, "USD");
+      el.priceFreeInr.textContent = formatMoney(0, "INR");
+      el.priceFreePkr.textContent = formatMoney(0, "PKR");
+      el.pricePrimeMonthlyUsd.textContent = `${formatMoney(PLAN_USD.primeMonthly, "USD")} / month`;
+      el.pricePrimeMonthlyInr.textContent = primeMonthlyInr === null ? "INR N/A" : `${formatMoney(primeMonthlyInr, "INR")} / month`;
+      el.pricePrimeMonthlyPkr.textContent = primeMonthlyPkr === null ? "PKR N/A" : `${formatMoney(primeMonthlyPkr, "PKR")} / month`;
+      el.pricePrimeYearlyUsd.textContent = `${formatMoney(PLAN_USD.primeYearly, "USD")} / year`;
+      el.pricePrimeYearlyInr.textContent = primeYearlyInr === null ? "INR N/A" : `${formatMoney(primeYearlyInr, "INR")} / year`;
+      el.pricePrimeYearlyPkr.textContent = primeYearlyPkr === null ? "PKR N/A" : `${formatMoney(primeYearlyPkr, "PKR")} / year`;
+    }
+
+    function runCurrencyConvert() {
+      const amount = Number(el.convertAmount.value);
+      const from = el.convertFrom.value;
+      const to = el.convertTo.value;
+      if (Number.isNaN(amount) || amount < 0) {
+        setStatus("Enter a valid amount for conversion.", "error");
+        return;
+      }
+      const result = convertAmountValue(amount, from, to);
+      if (result === null) {
+        setStatus("Conversion rate unavailable right now.", "error");
+        return;
+      }
+      el.convertResult.textContent = `${formatMoney(amount, from)} = ${formatMoney(result, to)}`;
+      setStatus("Currency converted successfully.", "ok");
+    }
+
+    async function refreshFxRates() {
+      try {
+        const res = await fetch("https://open.er-api.com/v6/latest/USD");
+        const data = await res.json();
+        if (!res.ok || data?.result !== "success" || !data?.rates?.INR || !data?.rates?.PKR) {
+          throw new Error("Rate API unavailable");
+        }
+        fxRates = { USD: 1, INR: data.rates.INR, PKR: data.rates.PKR };
+      } catch {
+        fxRates = { ...FALLBACK_RATES };
+      } finally {
+        updatePlanPricingUI();
+        const usdToInr = convertAmountValue(1, "USD", "INR");
+        const usdToPkr = convertAmountValue(1, "USD", "PKR");
+        el.convertResult.textContent = `1 USD = ${usdToInr ? usdToInr.toFixed(2) : "--"} INR / ${usdToPkr ? usdToPkr.toFixed(2) : "--"} PKR`;
+      }
+    }
+
+    function effectivePlan() {
+      const account = getAccount();
+      const preview = el.planPreview.value;
+      if (preview === "free") return "free";
+      if (preview === "paid") return "paid";
+      if (account.plan === "paid" || account.paidSimulated) return "paid";
+      return "free";
+    }
+
+    function updateUsageUI() {
+      const plan = effectivePlan();
+      const usage = getUsageData();
+      const count = usage.count;
+      const pct = Math.min((count / DAILY_FREE_LIMIT) * 100, 100);
+      el.usageText.textContent = plan === "paid" ? `Usage today: ${count} / ∞` : `Usage today: ${count} / ${DAILY_FREE_LIMIT}`;
+      el.planText.textContent = `Current plan: ${plan === "paid" ? "Paid" : "Free"}`;
+      el.usageBar.style.width = plan === "paid" ? "0%" : `${pct}%`;
+      el.usageBar.style.opacity = plan === "paid" ? "0.25" : "1";
+    }
+
+    function canGenerate() {
+      const plan = effectivePlan();
+      if (plan === "paid") return true;
+      const usage = getUsageData();
+      return usage.count < DAILY_FREE_LIMIT;
+    }
+
+    function incrementUsage() {
+      const usage = getUsageData();
+      usage.count += 1;
+      setUsageData(usage);
+      updateUsageUI();
+    }
+
+    function setStatus(msg = "", type = "") {
+      el.status.textContent = msg;
+      el.status.className = "status" + (type ? ` ${type}` : "");
+    }
+
+    function setLoading(loading) {
+      el.generateBtn.disabled = loading;
+      if (loading) {
+        el.status.className = "status";
+        el.status.innerHTML = '<span class="loading"><span class="spinner"></span>Generating with gpt-4o-mini...</span>';
+      }
+    }
+
+    function parseResponse(data) {
+      if (typeof data.output_text === "string" && data.output_text.trim()) return data.output_text.trim();
+      if (Array.isArray(data.output)) {
+        const all = [];
+        for (const item of data.output) {
+          if (!Array.isArray(item.content)) continue;
+          for (const c of item.content) {
+            if ((c.type === "output_text" || c.type === "text") && typeof c.text === "string") all.push(c.text);
+          }
+        }
+        if (all.length) return all.join("\n\n").trim();
+      }
+      return "No text output returned. Try a more specific prompt.";
+    }
+
+    function renderTabs() {
+      el.tabs.innerHTML = "";
+      for (const tool of tools) {
+        const btn = document.createElement("button");
+        btn.className = "tab-btn" + (tool.id === activeTool.id ? " active" : "");
+        btn.type = "button";
+        btn.textContent = tool.name;
+        btn.addEventListener("click", () => {
+          activeTool = tool;
+          renderTabs();
+          applyTool();
+        });
+        el.tabs.appendChild(btn);
+      }
+    }
+
+    function applyTool() {
+      el.activeToolChip.textContent = activeTool.name;
+      el.toolTitle.textContent = activeTool.name;
+      el.toolDesc.textContent = activeTool.desc;
+      el.toolHint.textContent = activeTool.hint;
+      el.inputPrompt.placeholder = activeTool.placeholder;
+      el.output.textContent = "Your result will appear here.";
+      setStatus();
+    }
+
+    function refreshAccountUI() {
+      const account = getAccount();
+      const loggedIn = !!account.email;
+      el.accountBadge.textContent = loggedIn
+        ? `${account.email} (${effectivePlan() === "paid" ? "Paid" : "Free"})`
+        : "Guest (Free)";
+      el.accountInfo.textContent = loggedIn
+        ? "Your requests are tracked daily in this browser."
+        : "Log in to keep your usage and plan state.";
+      updateUsageUI();
+    }
+
+    function login() {
+      const email = el.email.value.trim();
+      const password = el.password.value.trim();
+      if (!email || !password) {
+        setStatus("Please enter email and password.", "error");
+        return;
+      }
+      const existing = getAccount();
+      setAccount({
+        email,
+        plan: existing.plan || "free",
+        paidSimulated: existing.paidSimulated || false
+      });
+      refreshAccountUI();
+      setStatus("Logged in successfully.", "ok");
+    }
+
+    function logout() {
+      setAccount({ email: "", plan: "free", paidSimulated: false });
+      el.email.value = "";
+      el.password.value = "";
+      refreshAccountUI();
+      setStatus("Logged out.");
+    }
+
+    function rememberKeyToggle() {
+      rememberKey = !rememberKey;
+      el.rememberBtn.textContent = `Remember Key: ${rememberKey ? "On" : "Off"}`;
+      if (!rememberKey) localStorage.removeItem("creator_ai_hub_api_key");
+    }
+
+    function simulatePaid() {
+      const account = getAccount();
+      account.paidSimulated = !account.paidSimulated;
+      if (account.paidSimulated) account.plan = "paid";
+      setAccount(account);
+      refreshAccountUI();
+      setStatus(account.paidSimulated ? "Simulated paid plan enabled." : "Simulated paid plan disabled.", "warn");
+    }
+
+    function openUpgrade() {
+      window.open(STRIPE_UPGRADE_URL, "_blank", "noopener,noreferrer");
+      setStatus("Opened Stripe upgrade page in a new tab.", "ok");
+    }
+
+    async function generate() {
+      const key = el.apiKey.value.trim();
+      const prompt = el.inputPrompt.value.trim();
+
+      if (!key) return setStatus("Please enter your OpenAI API key.", "error");
+      if (!prompt) return setStatus("Please write your prompt.", "error");
+
+      if (!canGenerate()) {
+        setStatus("Daily free limit reached (5/5). Upgrade to paid for unlimited usage.", "warn");
+        return;
+      }
+
+      if (rememberKey) localStorage.setItem("creator_ai_hub_api_key", key);
+      else localStorage.removeItem("creator_ai_hub_api_key");
+
+      setLoading(true);
+      try {
+        const compiledSystemPrompt = activeTool.systemPrompt.replaceAll("{input}", prompt);
+
+        const res = await fetch("https://api.openai.com/v1/responses", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${key}`
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            input: [
+              { role: "system", content: compiledSystemPrompt },
+              { role: "user", content: prompt }
+            ]
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data?.error?.message || "Request failed.");
+        el.output.textContent = parseResponse(data);
+        incrementUsage();
+        setStatus("Done. Output generated.", "ok");
+      } catch (e) {
+        setStatus(`Error: ${e.message}`, "error");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function clearInput() {
+      el.inputPrompt.value = "";
+      el.output.textContent = "Your result will appear here.";
+      setStatus("Cleared.");
+    }
+
+    async function copyOutput() {
+      const text = el.output.textContent.trim();
+      if (!text || text === "Your result will appear here.") {
+        setStatus("Nothing to copy yet.", "error");
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(text);
+        setStatus("Copied output.", "ok");
+      } catch {
+        setStatus("Clipboard copy failed.", "error");
+      }
+    }
+
+    function downloadOutput() {
+      const text = el.output.textContent.trim();
+      if (!text || text === "Your result will appear here.") {
+        setStatus("Nothing to download yet.", "error");
+        return;
+      }
+      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${activeTool.id}-output.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+      setStatus("Downloaded output.", "ok");
+    }
+
+    function init() {
+      const savedKey = localStorage.getItem("creator_ai_hub_api_key");
+      if (savedKey) {
+        el.apiKey.value = savedKey;
+        rememberKey = true;
+        el.rememberBtn.textContent = "Remember Key: On";
+      }
+
+      const account = getAccount();
+      if (account.email) el.email.value = account.email;
+
+      renderTabs();
+      applyTool();
+      refreshAccountUI();
+      updatePlanPricingUI();
+      refreshFxRates();
+
+      el.loginBtn.addEventListener("click", login);
+      el.logoutBtn.addEventListener("click", logout);
+      el.upgradeBtn.addEventListener("click", openUpgrade);
+      el.simulatePaidBtn.addEventListener("click", simulatePaid);
+      el.rememberBtn.addEventListener("click", rememberKeyToggle);
+      el.planPreview.addEventListener("change", refreshAccountUI);
+      el.convertBtn.addEventListener("click", runCurrencyConvert);
+
+      el.generateBtn.addEventListener("click", generate);
+      el.clearBtn.addEventListener("click", clearInput);
+      el.copyBtn.addEventListener("click", copyOutput);
+      el.downloadBtn.addEventListener("click", downloadOutput);
+
+      el.inputPrompt.addEventListener("keydown", (event) => {
+        if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+          event.preventDefault();
+          generate();
+        }
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
